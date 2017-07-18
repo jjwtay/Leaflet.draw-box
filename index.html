@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.1.0/dist/leaflet.css"
         integrity="sha512-wcw6ts8Anuw10Mzh9Ytw4pylW8+NAD4ch3lqm9lzAsTxg0GFeJgoAtxuCLREZSC5lUXdVyo/7yfsqFjQ4S+aKw=="
         crossorigin=""/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.css" crossorigin=""/>
 
     <!--
 	<link rel="stylesheet" href="../Leaflet.draw/dist/leaflet.draw.css" />
@@ -16,7 +17,7 @@
         integrity="sha512-mNqn2Wg7tSToJhvHcqfzLMU6J4mkOImSPTxVZAdo+lcPlk+GhZmYgACEe0x35K7YzW1zJ7XyJV/TT1MrdXvMcA=="
         crossorigin=""></script>
 	
-    <script src="./example/leaflet.draw-src.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.js" crossorigin=""></script>
     <script src="./example/L.Box.js"></script>
 	<script src="./Leaflet.draw-box.js"></script>
     
@@ -35,49 +36,30 @@
 			map = new L.Map('map', {
 				layers: [osm],
 				center: new L.LatLng(-37.7772, 175.2756),
-				zoom: 15
+				zoom: 15,
+                drawControl: true
 			});
-		/*var drawnItems = new L.FeatureGroup();
-		map.addLayer(drawnItems);
-		var drawControl = new L.Control.Draw({
-			draw: {
-				position: 'topleft',
-				polygon: {
-					title: 'Draw a sexy polygon!',
-					allowIntersection: false,
-					drawError: {
-						color: '#b00b00',
-						timeout: 1000
-					},
-					shapeOptions: {
-						color: '#bada55'
-					},
-					showArea: true
-				},
-				polyline: {
-					metric: false
-				},
-				circle: {
-					shapeOptions: {
-						color: '#662d91'
-					}
-				}
-			},
-			edit: {
-				featureGroup: drawnItems
-			}
-		});
-		map.addControl(drawControl);
-		map.on('draw:created', function(e) {
+        
+        
+
+        var drawnItems = new L.FeatureGroup();
+        map.addLayer(drawnItems);
+        var drawControl = new L.Control.Draw({
+            edit: {
+                featureGroup: drawnItems
+            }
+        });
+        map.addControl(drawControl);
+		/*map.on('draw:created', function(e) {
 			var type = e.layerType,
 				layer = e.layer;
 			if (type === 'marker') {
 				layer.bindPopup('A popup!');
 			}
 			drawnItems.addLayer(layer);
-		});
-		var ellipse = L.ellipse([-37.7772, 175.2756], [500, 100], 45);
-		drawnItems.addLayer(ellipse);*/
+		});*/
+		//ar ellipse = L.ellipse([-37.7772, 175.2756], [500, 100], 45);
+		//drawnItems.addLayer(ellipse);*/
 
         let box1 = L.box({
             center: [-37.7772, 175.2756],
