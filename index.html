@@ -85,6 +85,7 @@
             length: 100,
             bearing: 45
         }).on('dblclick', e => {
+            L.DomEvent.stop(e)
             if (box1.editing.enabled) {
                 box1.editing.disable()
             } else {
