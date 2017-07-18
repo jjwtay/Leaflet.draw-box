@@ -11,7 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/jjwtay/Leaflet.draw-box.git"
   },
-  "author": "",
+  "author": "Jeffrey Taylor",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/jjwtay/Leaflet.draw-box/issues"
