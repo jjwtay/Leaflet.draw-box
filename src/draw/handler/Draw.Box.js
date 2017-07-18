@@ -29,30 +29,37 @@ L.Draw.Box = L.Draw.SimpleShape.extend({
 
 	_drawShape: function (latlng) {
 		if (!this._shape) {
-			var radius = this._startLatLng.distanceTo(latlng);
+			
+			let width = Math.max(this._startLatLng.distanceTo(latlng), 10)
+			let length = width
 			this._shape = L.box({
                 center: this._startLatLng,
-                width: this._shape._mRadiusX,
-                length: this._shape._mRadiusY,
+                width,
+                length,
+				bearing: 0,
                 ...this.options.shapeOptions
             })
-            //this._shape = new L.Ellipse(this._startLatLng, [radius, radius], 0, this.options.shapeOptions);
 			this._map.addLayer(this._shape);
 		} else {
-			//var radius = this._startLatLng.distanceTo(latlng);
-			//this._shape.setRadius([radius, radius]);
-            console.log('what ? ')
+			let bounds = new L.LatLngBounds(this._startLatLng, latlng)
+			let width = 2 * bounds.getNorthWest().distanceTo(bounds.getNorthEast())
+			let height = width
+			this._shape.setWidth(width)
+			this._shape.setLength(height)
+			this._shape.setLatLngs(this._shape.getLatLngs())
 		}
 	},
 
 	_fireCreatedEvent: function () {
 		let box = L.box({
+			...this.options.shapeOptions,
             center: this._startLatLng,
-            width: this._shape._mRadiusX,
-            length: this._shape._mRadiusY,
-            ...this.options.shapeOptions
+            width: this._shape.getWidth(),
+            length: this._shape.getLength(),
+			bearing: this._shape.getBearing(),
+
         })
-        //var ellipse = new L.Ellipse(this._startLatLng, [this._shape._mRadiusX, this._shape._mRadiusY], 0, this.options.shapeOptions);
+
 		L.Draw.SimpleShape.prototype._fireCreatedEvent.call(this, box)
 	},
 
@@ -66,12 +73,12 @@ L.Draw.Box = L.Draw.SimpleShape.extend({
 		if (this._isDrawing) {
 			this._drawShape(latlng);
 
-			// Get the new radius (rounded to 1 dp)
-			radius = this._shape._mRadiusX.toFixed(1);
+
+			radius = this._shape.getWidth()
 
 			this._tooltip.updateContent({
 				text: this._endLabelText,
-				subtext: showRadius ? L.drawLocal.draw.handlers.ellipse.radius + ': ' + L.GeometryUtil.readableDistance(radius, useMetric) : ''
+				subtext: showRadius ? L.drawLocal.draw.handlers.box.radius + ': ' + radius : ''
 			});
 		}
 	}
