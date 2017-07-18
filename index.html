@@ -85,8 +85,11 @@
             length: 100,
             bearing: 45
         }).on('dblclick', e => {
-            console.log(box1)
-            //box1.editing.toggle()
+            if (box1.editing.enabled) {
+                box1.editing.disable()
+            } else {
+                box1.editing.enable()
+            }
         })
         map.addLayer(box1)
 	</script>
