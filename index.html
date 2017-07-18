@@ -81,12 +81,12 @@
 
         let box1 = L.box({
             center: [-37.7772, 175.2756],
-            width: 500,
-            length: 100,
+            width: 1000,
+            length: 500,
             bearing: 45
         }).on('dblclick', e => {
             L.DomEvent.stop(e)
-            if (box1.editing.enabled) {
+            if (box1.editing.enabled()) {
                 box1.editing.disable()
             } else {
                 box1.editing.enable()
