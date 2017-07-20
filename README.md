@@ -8,7 +8,11 @@ Leaflet.draw-box requires
 + [Leaflet.draw 0.2.4](https://github.com/Leaflet/Leaflet.draw/releases/tag/v0.2.4) or higher
 + [leaflet.box](https://github.com/jjwtay/leaflet.box)
 
-## Also see
+## Usage
+
+See [Leaflet.draw](https://github.com/Leaflet/Leaflet.draw#using) and [leaflet.box](https://github.com/jjwtay/leaflet.box)
+
+## Checkout
 
 [leaflet.arc](https://github.com/jjwtay/leaflet.arc) - Leaflet Arc drawing.
 
