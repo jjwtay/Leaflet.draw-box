@@ -8,6 +8,16 @@ Leaflet.draw-box requires
 + [Leaflet.draw 0.2.4](https://github.com/Leaflet/Leaflet.draw/releases/tag/v0.2.4) or higher
 + [leaflet.box](https://github.com/jjwtay/leaflet.box)
 
-## Usage
+## Also see
 
-See [Leaflet.draw](https://github.com/Leaflet/Leaflet.draw#using) and [leaflet.box](https://github.com/jjwtay/leaflet.box).
+[leaflet.arc](https://github.com/jjwtay/leaflet.arc) - Leaflet Arc drawing.
+
+[leaflet.draw-arc](https://github.com/jjwtay/leaflet.draw-arc) - Leaflet Draw support for leaflet.arc.
+
+[leaflet.sector](https://github.com/jjwtay/leaflet.sector) - Leaflet Sector drawing.
+
+[leaflet.draw-sector](https://github.com/jjwtay/leaflet.draw-sector) - Leaflet Draw support for leaflet.sector.
+
+## License
+
+This code is provided under the Apache 2.0 license.
