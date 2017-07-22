@@ -22,8 +22,6 @@ Leaflet.draw-box requires
     import './path/to/leaflet.box'
     import './path/to/Leaflet.draw-box'
 
-    * If using es6 with object spread you can opt to use the uncompiled src/Leaflet.draw-box.js
-
 *ES6 module*
 
     TODO
