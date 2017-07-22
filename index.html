@@ -21,7 +21,7 @@
     <script src="./example/leaflet.box.js"></script>
     <script src="./example/leaflet.arc.js"></script>
     <script src="./example/leaflet.sector.js"></script>
-	<script src="./example/Leaflet.draw-box.js"></script>
+	<script src="./Leaflet.draw-box.js"></script>
     <script src="./example/Leaflet.draw-arc.js"></script>
     <script src="./example/Leaflet.draw-sector.js"></script>
     
@@ -162,7 +162,11 @@
             width: 1000,
             length: 500,
             bearing: 45,
-            color: 'blue'
+            color: 'blue',
+            editables: {
+                bearing: false,
+                center: true
+            }
         }).on('dblclick', e => toggle(e, box1))
 
         let arc1 = L.arc({

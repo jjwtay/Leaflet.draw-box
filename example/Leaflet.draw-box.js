@@ -110,7 +110,13 @@ L.Edit.Box = L.Edit.SimpleShape.extend({
 		rotateIcon: new L.DivIcon({
 			iconSize: new L.Point(8, 8),
 			className: 'leaflet-div-icon leaflet-editing-icon leaflet-edit-rotate'
-		})
+		}),
+		editables: {
+			center: true,
+			bearing: true,
+			width: true,
+			length: true
+		}
 	},
 
 	_initMarkers: function _initMarkers() {
@@ -119,13 +125,14 @@ L.Edit.Box = L.Edit.SimpleShape.extend({
 		}
 
 		// Create center marker
-		this._createMoveMarker();
+
+		this.options.editables.center && this._createMoveMarker();
 
 		// Create edge marker
-		this._createResizeMarker();
+		(this.options.editables.width || this.options.editables.length) && this._createResizeMarker();
 
 		// Create rotate Marker();
-		this._createRotateMarker();
+		this.options.editables.bearing && this._createRotateMarker();
 	},
 
 	_createMoveMarker: function _createMoveMarker() {
@@ -261,12 +268,15 @@ L.Edit.Box = L.Edit.SimpleShape.extend({
 	_repositionResizeMarkers: function _repositionResizeMarkers() {
 		var _this2 = this;
 
+		if (!this.options.editables.length && !this.options.editables.width) return;
+
 		this._shape.getLatLngs()[0].forEach(function (latlng, index) {
 			_this2._resizeMarkers[index].setLatLng(latlng);
 		});
 	},
 
 	_repositionRotateMarker: function _repositionRotateMarker() {
+		if (!this.options.editables.bearing) return;
 		var latlng = this._moveMarker.getLatLng();
 		var rotatemarkerPoint = this._getRotateMarkerPoint(latlng);
 
@@ -296,7 +306,7 @@ L.Box.addInitHook(function () {
 	});
 });
 
-L.drawLocal.draw.toolbar.buttons.box = 'Draw an Box';
+L.drawLocal.draw.toolbar.buttons.box = 'Draw a Box';
 
 L.drawLocal.draw.handlers.box = {
 	tooltip: {
