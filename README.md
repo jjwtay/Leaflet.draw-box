@@ -12,12 +12,14 @@ Leaflet.draw-box requires
 
 *Traditional*
 
-    Include leaflet.box.js in your html
+    Include Leaflet.draw-box.js in your html
 
+    <script src='/path/to/leaflet.box.js'></script>
     <script src='/path/to/Leaflet.draw-box.js'></script>
 
 *Webpack as non es6 module*
 
+    import './path/to/leaflet.box'
     import './path/to/Leaflet.draw-box'
 
     * If using es6 with object spread you can opt to use the uncompiled src/Leaflet.draw-box.js
