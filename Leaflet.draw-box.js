@@ -230,6 +230,8 @@ L.Edit.Box = L.Edit.SimpleShape.extend({
 
         this._rotateMarker = this._createMarker(rotatemarkerPoint, this.options.rotateIcon);
         this._rotateMarker.options.draggable = this._shape.rotatable;
+
+        this._rotateMarker.options.setOpacity(this._shape.rotatable ? 1.0 : 0.0);
     },
     _getRotateMarkerPoint: function _getRotateMarkerPoint() {
         var moveLatLng = this._moveMarker.getLatLng(),
