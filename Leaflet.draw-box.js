@@ -1,3 +1,33 @@
+L.DrawToolbar.prototype.options.box = L.DrawToolbar.prototype.options.rectangle;
+
+L.DrawToolbar.prototype.getModeHandlers = function (map) {
+    return [{
+        enabled: this.options.polyline,
+        handler: new L.Draw.Polyline(map, this.options.polyline),
+        title: L.drawLocal.draw.toolbar.buttons.polyline
+    }, {
+        enabled: this.options.polygon,
+        handler: new L.Draw.Polygon(map, this.options.polygon),
+        title: L.drawLocal.draw.toolbar.buttons.polygon
+    }, {
+        enabled: this.options.rectangle,
+        handler: new L.Draw.Rectangle(map, this.options.rectangle),
+        title: L.drawLocal.draw.toolbar.buttons.rectangle
+    }, {
+        enabled: this.options.circle,
+        handler: new L.Draw.Circle(map, this.options.circle),
+        title: L.drawLocal.draw.toolbar.buttons.circle
+    }, {
+        enabled: this.options.marker,
+        handler: new L.Draw.Marker(map, this.options.marker),
+        title: L.drawLocal.draw.toolbar.buttons.marker
+    }, {
+        enabled: this.options.box,
+        handler: new L.Draw.Box(map, {}),
+        title: L.drawLocal.draw.toolbar.buttons.box
+    }];
+};
+
 var _extends = Object.assign || function (target) {
   for (var i = 1; i < arguments.length; i++) {
     var source = arguments[i];
@@ -145,10 +175,6 @@ L.Edit.Box = L.Edit.SimpleShape.extend({
         var center = this._shape.getCenter();
 
         this._moveMarker = this._createMarker(center, this.options.moveIcon);
-
-        this._moveMarker.setOpacity(this._editables.center ? 1.0 : 0.0);
-
-        this._moveMarker.options.draggable = false;
     },
     _createResizeMarker: function _createResizeMarker() {
         var _this = this;

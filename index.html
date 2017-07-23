@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"
 
         crossorigin=""/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.css" crossorigin=""/>
-
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.css" crossorigin=""/>-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.10/leaflet.draw-src.css"/>
     <!--
 	<link rel="stylesheet" href="../Leaflet.draw/dist/leaflet.draw.css" />
 	<link rel="stylesheet" href="../dist/leaflet.draw-ellipse.css" />-->
@@ -17,7 +17,9 @@
 
     <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js" crossorigin=""></script>
 	<script src="https://unpkg.com/leaflet-easybutton@2.0.0/src/easy-button.js"></script>
-    <script src="./example/leaflet.draw-src.js"></script>
+    <!--<script src="./example/leaflet.draw-src.js"></script>-->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.10/leaflet.draw-src.js"></script>
     <script src="./example/leaflet.box.js"></script>
     <script src="./example/leaflet.arc.js"></script>
     <script src="./example/leaflet.sector.js"></script>
@@ -43,7 +45,11 @@
 				center: new L.LatLng(-37.7772, 175.2756),
 				zoom: 15,
 
-			})
+            })
+            
+		var drawnItems = new L.FeatureGroup();
+		map.addLayer(drawnItems);
+        
         
         L.easyButton( '<span>box</span>', function(){
             let options = {
@@ -80,6 +86,38 @@
             }
             new L.Draw.Sector(map, options).enable()
         }).addTo(map)
+
+/*
+        var drawControl = new L.Control.Draw({
+			draw: {
+				position: 'topleft',
+				polygon: {
+					title: 'Draw a sexy polygon!',
+					allowIntersection: false,
+					drawError: {
+						color: '#b00b00',
+						timeout: 1000
+					},
+					shapeOptions: {
+						color: '#bada55'
+					},
+					showArea: true
+				},
+				polyline: {
+					metric: false
+				},
+				circle: {
+					shapeOptions: {
+						color: '#662d91'
+					}
+				}
+			},
+			edit: {
+				featureGroup: drawnItems
+			}
+		});
+        map.addControl(drawControl);
+*/
 
         map.on('draw:created', e => {
             
@@ -131,7 +169,7 @@
 
             newSector.editing.enable()
 
-            map.addLayer(newSector)
+            drawnItems.addLayer(newSector)
         }
 
         function addArc(e) {
@@ -145,7 +183,7 @@
 
             newArc.editing.enable()
 
-            map.addLayer(newArc)
+            drawnItems.addLayer(newArc)
         }
 
         function toggle(e, shape) {
@@ -187,9 +225,9 @@
             color: 'green'
         }).on('dblclick', e => toggle(e, sector1))
 
-        map.addLayer(sector1)
-        map.addLayer(arc1)
-        map.addLayer(box1)
+        drawnItems.addLayer(sector1)
+        drawnItems.addLayer(arc1)
+        drawnItems.addLayer(box1)
 	</script>
 </body>
 

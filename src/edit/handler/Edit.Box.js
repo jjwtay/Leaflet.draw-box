@@ -45,10 +45,6 @@ L.Edit.Box = L.Edit.SimpleShape.extend({
         const center = this._shape.getCenter()
 
         this._moveMarker = this._createMarker(center, this.options.moveIcon)
-
-        this._moveMarker.setOpacity(this._editables.center ? 1.0 : 0.0)
-
-        this._moveMarker.options.draggable = false
     },
 
     _createResizeMarker () {
