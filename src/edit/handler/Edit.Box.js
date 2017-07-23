@@ -24,7 +24,7 @@ L.Edit.Box = L.Edit.SimpleShape.extend({
         }),
     },
 
-    _initMarkers: function () {
+    _initMarkers () {
         if (!this._markerGroup) {
             this._markerGroup = new L.LayerGroup()
         }
@@ -40,9 +40,9 @@ L.Edit.Box = L.Edit.SimpleShape.extend({
         this._createRotateMarker()
     },
 
-    _createMoveMarker: function () {
+    _createMoveMarker () {
 
-        let center = this._shape.getCenter()
+        const center = this._shape.getCenter()
 
         this._moveMarker = this._createMarker(center, this.options.moveIcon)
 
@@ -51,9 +51,9 @@ L.Edit.Box = L.Edit.SimpleShape.extend({
         this._moveMarker.options.draggable = false
     },
 
-    _createResizeMarker: function () {
+    _createResizeMarker () {
         this._resizeMarkers = this._shape.getLatLngs()[0]
-            .map(latLng => this._createMarker(latLng, this.options.resizeIcon))
+            .map((latLng) => this._createMarker(latLng, this.options.resizeIcon))
             .map((marker, index) => {
                 marker.setOpacity(this._editables.width || this._editables.length ? 1.0 : 0.0)
 
@@ -69,27 +69,27 @@ L.Edit.Box = L.Edit.SimpleShape.extend({
             })
     },
 
-    _createRotateMarker: function() {
-        let center = this._shape.getCenter(),
+    _createRotateMarker () {
+        const center = this._shape.getCenter(),
             rotatemarkerPoint = this._getRotateMarkerPoint(center)
 
         this._rotateMarker = this._createMarker(rotatemarkerPoint, this.options.rotateIcon)
         this._rotateMarker.setOpacity(this._editables.bearing ? 1.0 : 0.0)
     },
 
-    _getRotateMarkerPoint: function () {
-        let moveLatLng = this._moveMarker.getLatLng(),
+    _getRotateMarkerPoint () {
+        const moveLatLng = this._moveMarker.getLatLng(),
             br = this._shape.computeDestinationPoint(moveLatLng, this._shape.getLength() * 1.5 / 2, this._shape.getBearing())
         return br
     },
 
-    _onMarkerDragStart: function (e) {
+    _onMarkerDragStart (e) {
         L.Edit.SimpleShape.prototype._onMarkerDragStart.call(this, e)
         this._currentMarker = e.target
     },
 
-    _onMarkerDrag: function (e) {
-        let marker = e.target,
+    _onMarkerDrag (e) {
+        const marker = e.target,
             latlng = marker.getLatLng()
 
         if (marker === this._moveMarker) {
@@ -103,7 +103,7 @@ L.Edit.Box = L.Edit.SimpleShape.extend({
         this._shape.redraw()
     },
 
-    _move: function (latlng) {
+    _move (latlng) {
         this._shape.setCenter(latlng)
         this._shape.setLatLngs(this._shape.getLatLngs())
 
@@ -114,8 +114,8 @@ L.Edit.Box = L.Edit.SimpleShape.extend({
         this._repositionRotateMarker()
     },
 
-    _rotate: function (latlng) {
-        let moveLatLng = this._moveMarker.getLatLng(),
+    _rotate (latlng) {
+        const moveLatLng = this._moveMarker.getLatLng(),
             pc = this._map.project(moveLatLng),
             ph = this._map.project(latlng),
             v = [ph.x - pc.x, ph.y - pc.y],
@@ -131,8 +131,8 @@ L.Edit.Box = L.Edit.SimpleShape.extend({
         this._repositionRotateMarker()
     },
 
-    _resize: function (latlng) {
-        let moveLatLng = this._moveMarker.getLatLng(),
+    _resize (latlng) {
+        const moveLatLng = this._moveMarker.getLatLng(),
             center = this._map.project(moveLatLng),
             corner = this._map.project(latlng),
             bearing = this._map.project(this._rotateMarker._latlng),
@@ -162,16 +162,16 @@ L.Edit.Box = L.Edit.SimpleShape.extend({
         this._repositionRotateMarker()
     },
 
-    _repositionResizeMarkers: function () {
+    _repositionResizeMarkers () {
         this._shape.getLatLngs()[0]
             .forEach((latlng, index) => {
                 this._resizeMarkers[index].setLatLng(latlng)
             })
     },
 
-    _repositionRotateMarker: function () {
+    _repositionRotateMarker () {
         //if (!this._editables.bearing) return
-        let latlng = this._moveMarker.getLatLng(),
+        const latlng = this._moveMarker.getLatLng(),
             rotatemarkerPoint = this._getRotateMarkerPoint(latlng)
 
         this._rotateMarker.setLatLng(rotatemarkerPoint)

@@ -140,7 +140,6 @@ L.Edit.Box = L.Edit.SimpleShape.extend({
         // Create rotate Marker();
         this._createRotateMarker();
     },
-
     _createMoveMarker: function _createMoveMarker() {
 
         var center = this._shape.getCenter();
@@ -151,7 +150,6 @@ L.Edit.Box = L.Edit.SimpleShape.extend({
 
         this._moveMarker.options.draggable = false;
     },
-
     _createResizeMarker: function _createResizeMarker() {
         var _this = this;
 
@@ -175,7 +173,6 @@ L.Edit.Box = L.Edit.SimpleShape.extend({
             }
         });
     },
-
     _createRotateMarker: function _createRotateMarker() {
         var center = this._shape.getCenter(),
             rotatemarkerPoint = this._getRotateMarkerPoint(center);
@@ -183,18 +180,15 @@ L.Edit.Box = L.Edit.SimpleShape.extend({
         this._rotateMarker = this._createMarker(rotatemarkerPoint, this.options.rotateIcon);
         this._rotateMarker.setOpacity(this._editables.bearing ? 1.0 : 0.0);
     },
-
     _getRotateMarkerPoint: function _getRotateMarkerPoint() {
         var moveLatLng = this._moveMarker.getLatLng(),
             br = this._shape.computeDestinationPoint(moveLatLng, this._shape.getLength() * 1.5 / 2, this._shape.getBearing());
         return br;
     },
-
     _onMarkerDragStart: function _onMarkerDragStart(e) {
         L.Edit.SimpleShape.prototype._onMarkerDragStart.call(this, e);
         this._currentMarker = e.target;
     },
-
     _onMarkerDrag: function _onMarkerDrag(e) {
         var marker = e.target,
             latlng = marker.getLatLng();
@@ -209,7 +203,6 @@ L.Edit.Box = L.Edit.SimpleShape.extend({
 
         this._shape.redraw();
     },
-
     _move: function _move(latlng) {
         this._shape.setCenter(latlng);
         this._shape.setLatLngs(this._shape.getLatLngs());
@@ -220,7 +213,6 @@ L.Edit.Box = L.Edit.SimpleShape.extend({
         // Move the rotate marker
         this._repositionRotateMarker();
     },
-
     _rotate: function _rotate(latlng) {
         var moveLatLng = this._moveMarker.getLatLng(),
             pc = this._map.project(moveLatLng),
@@ -237,7 +229,6 @@ L.Edit.Box = L.Edit.SimpleShape.extend({
         // Move the rotate marker
         this._repositionRotateMarker();
     },
-
     _resize: function _resize(latlng) {
         var moveLatLng = this._moveMarker.getLatLng(),
             center = this._map.project(moveLatLng),
@@ -262,7 +253,6 @@ L.Edit.Box = L.Edit.SimpleShape.extend({
         // Move the rotate marker
         this._repositionRotateMarker();
     },
-
     _repositionResizeMarkers: function _repositionResizeMarkers() {
         var _this2 = this;
 
@@ -270,7 +260,6 @@ L.Edit.Box = L.Edit.SimpleShape.extend({
             _this2._resizeMarkers[index].setLatLng(latlng);
         });
     },
-
     _repositionRotateMarker: function _repositionRotateMarker() {
         //if (!this._editables.bearing) return
         var latlng = this._moveMarker.getLatLng(),
