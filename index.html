@@ -3,13 +3,13 @@
 <html>
 
 <head>
-	<title>Leaflet Draw</title>
+	<title>Leaflet Draw Box</title>
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"
 
         crossorigin=""/>
-    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.css" crossorigin=""/>-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.10/leaflet.draw-src.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.css" crossorigin=""/>
+
     <!--
 	<link rel="stylesheet" href="../Leaflet.draw/dist/leaflet.draw.css" />
 	<link rel="stylesheet" href="../dist/leaflet.draw-ellipse.css" />-->
@@ -17,9 +17,7 @@
 
     <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js" crossorigin=""></script>
 	<script src="https://unpkg.com/leaflet-easybutton@2.0.0/src/easy-button.js"></script>
-    <!--<script src="./example/leaflet.draw-src.js"></script>-->
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.10/leaflet.draw-src.js"></script>
+    <script src="./example/leaflet.draw-src.js"></script>
     <script src="./example/leaflet.box.js"></script>
     <script src="./example/leaflet.arc.js"></script>
     <script src="./example/leaflet.sector.js"></script>
@@ -30,8 +28,16 @@
 </head>
 
 <body>
+    <div style='position: fixed; top: 0px; left: 40%;z-index:99999; background: white; padding:15px;border:5px solid black; border-radius:10px;'>
+        <h3>Double click any shape to toggle editing</h3>
+        <h3><span style='color:pink'>Pink</span> = non moveable box</h3>
+        <h3><span style='color:red'>Red</span> = non rotatable box</h3>
+        <h3><span style='color:blue'>Blue</span> = regular box</h3>
+        <h3><span style='color:green'>Green</span> = Rectangle(non rotatable bearing = 0 degrees)</h3>
+        <h3><span style='color:purple'>Purple</span> = non wideable box</h3>
+    </div>
 	<div id="map" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></div>
-    <a href="https://github.com/jjwtay/Leaflet.draw-box/"><img style="z-index: 99999 !important; position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
+    <a href="https://github.com/jjwtay/leaflet.box/"><img style="z-index: 99999 !important; position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png"></a>
 
 	<script>
 		var osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -45,11 +51,7 @@
 				center: new L.LatLng(-37.7772, 175.2756),
 				zoom: 15,
 
-            })
-            
-		var drawnItems = new L.FeatureGroup();
-		map.addLayer(drawnItems);
-        
+			})
         
         L.easyButton( '<span>box</span>', function(){
             let options = {
@@ -61,69 +63,28 @@
             }
             new L.Draw.Box(map, options).enable()
         }).addTo(map)
-    
-        L.easyButton( '<span>arc</span>', function(){
-            let options = {
-                shapeOptions: {
-                    width: 2,
-                    fill: false,
-                    color: 'purple'
-                }
-            }
-            new L.Draw.Arc(map, options).enable()
-        }).addTo(map)
-    
-        L.easyButton( '<span>sector</span>', function(){
-            let options = {
-                shapeOptions: {
-                    color: 'hotpink',
-                    opacity: 1.0,
-                    width: 2,
-                    fill: true,
-                    fillColor: 'pink',
-                    fillOpacity: .7
-                }
-            }
-            new L.Draw.Sector(map, options).enable()
-        }).addTo(map)
 
-/*
-        var drawControl = new L.Control.Draw({
-			draw: {
-				position: 'topleft',
-				polygon: {
-					title: 'Draw a sexy polygon!',
-					allowIntersection: false,
-					drawError: {
-						color: '#b00b00',
-						timeout: 1000
-					},
-					shapeOptions: {
-						color: '#bada55'
-					},
-					showArea: true
-				},
-				polyline: {
-					metric: false
-				},
-				circle: {
-					shapeOptions: {
-						color: '#662d91'
-					}
-				}
-			},
-			edit: {
-				featureGroup: drawnItems
-			}
-		});
-        map.addControl(drawControl);
-*/
+        L.easyButton('<span>rect</span>', function() {
+            let options = {
+                shapeOptions: {
+                    color: 'pink',
+                    width: 2,
+                    fill: false
+                }
+            }
+            new L.Draw.Rect(map, options).enable()
+        }).addTo(map)
 
         map.on('draw:created', e => {
+            console.log(e)
             
             switch (e.layerType) {
             case 'box':
                 addBox(e)
+                break
+            case 'rect':
+                console.log('rect')
+                addRect(e)
                 break
             case 'arc':
                 addArc(e)
@@ -153,6 +114,19 @@
             map.addLayer(newBox)
         }
 
+        function addRect(e) {
+            let newRect = L.rect({
+                center: e.layer.getCenter(),
+                width: e.layer.getWidth(),
+                length: e.layer.getLength(),
+                color: 'rgb(0, 255, 255)'
+            }).on('dblclick', e => toggle(e, newRect))
+
+            newRect.editing.enable()
+
+            map.addLayer(newRect)
+        }
+
         function addSector(e) {
             let newSector = L.sector({
                 center: e.layer.getCenter(),
@@ -169,7 +143,7 @@
 
             newSector.editing.enable()
 
-            drawnItems.addLayer(newSector)
+            map.addLayer(newSector)
         }
 
         function addArc(e) {
@@ -183,7 +157,7 @@
 
             newArc.editing.enable()
 
-            drawnItems.addLayer(newArc)
+            map.addLayer(newArc)
         }
 
         function toggle(e, shape) {
@@ -195,39 +169,54 @@
                 shape.editing.enable()
             }
         }
+        let box0 = L.box({
+            center: [-37.7772, 175.2556],
+            width: 750,
+            length: 500,
+            bearing: -45,
+            color: 'hotpink',
+            moveable: false
+        }).on('dblclick', e => toggle(e, box0))
 
         let box1 = L.box({
             center: [-37.7772, 175.2756],
-            width: 1000,
+            width: 750,
             length: 500,
-            bearing: 45,
-            color: 'blue',
-            editables: {
-                bearing: false,
-                center: true
-            }
+            bearing: 0,
+            color: 'blue'
         }).on('dblclick', e => toggle(e, box1))
 
-        let arc1 = L.arc({
-            center: [-37.7772, 175.2756],
-            radius: 1000,
+        let box2 = L.box({
+            center: [-37.7772, 175.2656],
+            width: 750,
+            length: 500,
+            bearing: 45,
             color: 'red',
-            startBearing: 0,
-            endBearing: 90
-        }).on('dblclick', e => toggle(e, arc1))
+            rotatable: false        
+        }).on('dblclick', e => toggle(e, box2))
 
-        let sector1 = L.sector({
-            center: [-37.7772, 175.2756],
-            innerRadius: 500,
-            outerRadius: 1000,
-            startBearing: 180,
-            endBearing: 270,
-            color: 'green'
-        }).on('dblclick', e => toggle(e, sector1))
+        let box3 = L.rect({
+            center: [-37.7772, 175.2856],
+            width: 750,
+            length: 500,
+            bearing: 45,
+            color: 'green'    
+        }).on('dblclick', e => toggle(e, box3))
 
-        drawnItems.addLayer(sector1)
-        drawnItems.addLayer(arc1)
-        drawnItems.addLayer(box1)
+        let box4 = L.rect({
+            center: [-37.7772, 175.2956],
+            width: 750,
+            length: 500,
+            bearing: 65,
+            wideable: false,
+            color: 'purple'
+        }).on('dblclick', e => toggle(e, box4))
+
+        map.addLayer(box0)
+        map.addLayer(box1)
+        map.addLayer(box2)
+        map.addLayer(box3)
+        map.addLayer(box4)
 	</script>
 </body>
 

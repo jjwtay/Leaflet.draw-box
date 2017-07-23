@@ -241,3 +241,8 @@ L.box = function (_ref2) {
         options = objectWithoutProperties(_ref2, ['center', 'width', 'length', 'bearing', 'rhumb', 'rotatable', 'moveable', 'wideable', 'lengthable']);
     return new L.Box(_extends({ center: center, width: width, rhumb: rhumb, length: length, bearing: bearing, rotatable: rotatable, moveable: moveable, wideable: wideable, lengthable: lengthable }, options));
 };
+
+L.rect = function (_ref3) {
+    var options = objectWithoutProperties(_ref3, []);
+    return new L.Box(_extends({}, options, { bearing: 0, rotatable: false }));
+};
