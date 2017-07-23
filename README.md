@@ -30,6 +30,20 @@ Leaflet.draw-box requires
 
 See [Leaflet.draw](https://github.com/Leaflet/Leaflet.draw#using) and [leaflet.box](https://github.com/jjwtay/leaflet.box)
 
+Creating:
+
+    L.Draw.Box(map, options*).enable()
+
+    L.Draw.Rect(map, options*).enable()
+
+    * Where options are the same structure as for Leaflet.draw
+
+Toggling:
+
+    myRect.editing.enable()
+
+    myRect.editing.disable()
+
 ## Checkout
 
 [leaflet.arc](https://github.com/jjwtay/leaflet.arc) - Leaflet Arc drawing.
