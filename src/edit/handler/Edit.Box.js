@@ -45,13 +45,17 @@ L.Edit.Box = L.Edit.SimpleShape.extend({
         const center = this._shape.getCenter()
 
         this._moveMarker = this._createMarker(center, this.options.moveIcon)
+
+        console.log(this._shape)
+
+        this._moveMarker.options.draggable = this._shape.moveable
     },
 
     _createResizeMarker () {
         this._resizeMarkers = this._shape.getLatLngs()[0]
             .map((latLng) => this._createMarker(latLng, this.options.resizeIcon))
             .map((marker, index) => {
-                marker.setOpacity(this._editables.width || this._editables.length ? 1.0 : 0.0)
+                marker.options.draggable = (this._shape.wideable || this._shape.lengthable)
 
                 switch (index) {
 
@@ -70,7 +74,7 @@ L.Edit.Box = L.Edit.SimpleShape.extend({
             rotatemarkerPoint = this._getRotateMarkerPoint(center)
 
         this._rotateMarker = this._createMarker(rotatemarkerPoint, this.options.rotateIcon)
-        this._rotateMarker.setOpacity(this._editables.bearing ? 1.0 : 0.0)
+        this._rotateMarker.options.draggable = this._shape.rotatable
     },
 
     _getRotateMarkerPoint () {
@@ -148,8 +152,13 @@ L.Edit.Box = L.Edit.SimpleShape.extend({
             length = 2 * moveLatLng.distanceTo(newlatlng),
             width = 2* latlng.distanceTo(newlatlng)
 
-        this._editables.width && this._shape.setWidth(width)
-        this._editables.length && this._shape.setLength(length)
+        if (this._shape.wideable) {
+            this._shape.setWidth(width)
+        }
+        if (this._shape.lengthable) {
+            this._shape.setLength(length)
+        }
+
         this._shape.setLatLngs(this._shape.getLatLngs())
 
         // Move the resize marker

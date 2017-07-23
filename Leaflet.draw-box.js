@@ -70,7 +70,6 @@ L.Draw.Box = L.Draw.SimpleShape.extend({
 
         L.Draw.SimpleShape.prototype.initialize.call(this, map, options);
     },
-
     _drawShape: function _drawShape(latlng) {
         var width = void 0,
             length = void 0,
@@ -98,7 +97,6 @@ L.Draw.Box = L.Draw.SimpleShape.extend({
             this._shape.setLatLngs(this._shape.getLatLngs());
         }
     },
-
     _fireCreatedEvent: function _fireCreatedEvent() {
         var box = L.box(_extends({}, this.options.shapeOptions, {
             center: this._startLatLng,
@@ -109,11 +107,11 @@ L.Draw.Box = L.Draw.SimpleShape.extend({
 
         L.Draw.SimpleShape.prototype._fireCreatedEvent.call(this, box);
     },
-
     _onMouseMove: function _onMouseMove(e) {
         var latlng = e.latlng,
-            showRadius = this.options.showRadius,
-            radius = void 0;
+            showRadius = this.options.showRadius;
+
+        var radius = void 0;
 
         this._tooltip.updatePosition(latlng);
         if (this._isDrawing) {
@@ -126,6 +124,29 @@ L.Draw.Box = L.Draw.SimpleShape.extend({
                 subtext: showRadius ? L.drawLocal.draw.handlers.box.radius + ': ' + radius : ''
             });
         }
+    }
+});
+
+L.Draw.Rect = L.Draw.Box.extend({
+    statics: {
+        TYPE: 'rect'
+    },
+    initialize: function initialize(map, options) {
+        // Save the type so super can fire, need to do this as cannot do this.TYPE :(
+        this.type = L.Draw.Rect.TYPE;
+
+        this._initialLabelText = L.drawLocal.draw.handlers.box.tooltip.start;
+
+        L.Draw.SimpleShape.prototype.initialize.call(this, map, options);
+    },
+    _fireCreatedEvent: function _fireCreatedEvent() {
+        var box = L.rect(_extends({}, this.options.shapeOptions, {
+            center: this._startLatLng,
+            width: this._shape.getWidth(),
+            length: this._shape.getLength()
+        }));
+
+        L.Draw.SimpleShape.prototype._fireCreatedEvent.call(this, box);
     }
 });
 
@@ -175,6 +196,10 @@ L.Edit.Box = L.Edit.SimpleShape.extend({
         var center = this._shape.getCenter();
 
         this._moveMarker = this._createMarker(center, this.options.moveIcon);
+
+        console.log(this._shape);
+
+        this._moveMarker.options.draggable = this._shape.moveable;
     },
     _createResizeMarker: function _createResizeMarker() {
         var _this = this;
@@ -182,7 +207,7 @@ L.Edit.Box = L.Edit.SimpleShape.extend({
         this._resizeMarkers = this._shape.getLatLngs()[0].map(function (latLng) {
             return _this._createMarker(latLng, _this.options.resizeIcon);
         }).map(function (marker, index) {
-            marker.setOpacity(_this._editables.width || _this._editables.length ? 1.0 : 0.0);
+            marker.options.draggable = _this._shape.wideable || _this._shape.lengthable;
 
             switch (index) {
 
@@ -204,7 +229,7 @@ L.Edit.Box = L.Edit.SimpleShape.extend({
             rotatemarkerPoint = this._getRotateMarkerPoint(center);
 
         this._rotateMarker = this._createMarker(rotatemarkerPoint, this.options.rotateIcon);
-        this._rotateMarker.setOpacity(this._editables.bearing ? 1.0 : 0.0);
+        this._rotateMarker.options.draggable = this._shape.rotatable;
     },
     _getRotateMarkerPoint: function _getRotateMarkerPoint() {
         var moveLatLng = this._moveMarker.getLatLng(),
@@ -270,8 +295,13 @@ L.Edit.Box = L.Edit.SimpleShape.extend({
             length = 2 * moveLatLng.distanceTo(newlatlng),
             width = 2 * latlng.distanceTo(newlatlng);
 
-        this._editables.width && this._shape.setWidth(width);
-        this._editables.length && this._shape.setLength(length);
+        if (this._shape.wideable) {
+            this._shape.setWidth(width);
+        }
+        if (this._shape.lengthable) {
+            this._shape.setLength(length);
+        }
+
         this._shape.setLatLngs(this._shape.getLatLngs());
 
         // Move the resize marker

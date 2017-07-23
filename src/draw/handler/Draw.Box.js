@@ -18,7 +18,7 @@ L.Draw.Box = L.Draw.SimpleShape.extend({
         metric: true // Whether to use the metric measurement system or imperial
     },
 
-    initialize: function (map, options) {
+    initialize (map, options) {
         // Save the type so super can fire, need to do this as cannot do this.TYPE :(
         this.type = L.Draw.Box.TYPE
 
@@ -27,7 +27,7 @@ L.Draw.Box = L.Draw.SimpleShape.extend({
         L.Draw.SimpleShape.prototype.initialize.call(this, map, options)
     },
 
-    _drawShape: function (latlng) {
+    _drawShape (latlng) {
         let width, length, height, bounds
 
         if (!this._shape) {
@@ -54,8 +54,8 @@ L.Draw.Box = L.Draw.SimpleShape.extend({
         }
     },
 
-    _fireCreatedEvent: function () {
-        let box = L.box({
+    _fireCreatedEvent () {
+        const box = L.box({
             ...this.options.shapeOptions,
             center: this._startLatLng,
             width: this._shape.getWidth(),
@@ -66,10 +66,11 @@ L.Draw.Box = L.Draw.SimpleShape.extend({
         L.Draw.SimpleShape.prototype._fireCreatedEvent.call(this, box)
     },
 
-    _onMouseMove: function (e) {
-        let latlng = e.latlng,
-            showRadius = this.options.showRadius,
-            radius
+    _onMouseMove (e) {
+        const latlng = e.latlng,
+            showRadius = this.options.showRadius
+
+        let radius
 
         this._tooltip.updatePosition(latlng)
         if (this._isDrawing) {
@@ -84,4 +85,28 @@ L.Draw.Box = L.Draw.SimpleShape.extend({
             })
         }
     }
+})
+
+L.Draw.Rect = L.Draw.Box.extend({
+    statics: {
+        TYPE: 'rect'
+    },
+    initialize (map, options) {
+        // Save the type so super can fire, need to do this as cannot do this.TYPE :(
+        this.type = L.Draw.Rect.TYPE
+
+        this._initialLabelText = L.drawLocal.draw.handlers.box.tooltip.start
+
+        L.Draw.SimpleShape.prototype.initialize.call(this, map, options)
+    },
+    _fireCreatedEvent () {
+        const box = L.rect({
+            ...this.options.shapeOptions,
+            center: this._startLatLng,
+            width: this._shape.getWidth(),
+            length: this._shape.getLength()
+        })
+
+        L.Draw.SimpleShape.prototype._fireCreatedEvent.call(this, box)
+    },
 })

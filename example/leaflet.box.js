@@ -52,66 +52,70 @@ L.Box = L.Polygon.extend({
             length = _ref$length === undefined ? 1000 : _ref$length,
             _ref$bearing = _ref.bearing,
             bearing = _ref$bearing === undefined ? 0 : _ref$bearing,
-            options = objectWithoutProperties(_ref, ['center', 'width', 'length', 'bearing']);
+            _ref$rhumb = _ref.rhumb,
+            rhumb = _ref$rhumb === undefined ? false : _ref$rhumb,
+            _ref$rotatable = _ref.rotatable,
+            rotatable = _ref$rotatable === undefined ? true : _ref$rotatable,
+            _ref$moveable = _ref.moveable,
+            moveable = _ref$moveable === undefined ? true : _ref$moveable,
+            _ref$wideable = _ref.wideable,
+            wideable = _ref$wideable === undefined ? true : _ref$wideable,
+            _ref$lengthable = _ref.lengthable,
+            lengthable = _ref$lengthable === undefined ? true : _ref$lengthable,
+            options = objectWithoutProperties(_ref, ['center', 'width', 'length', 'bearing', 'rhumb', 'rotatable', 'moveable', 'wideable', 'lengthable']);
 
-        this.setOptions(options).setCenter(center).setWidth(width).setLength(length).setBearing(bearing);
+        this.setOptions(options).setCenter(center).setWidth(width).setLength(length).setBearing(bearing).setRhumb(rhumb);
+
+        this.rotatable = rotatable;
+        this.moveable = moveable;
+        this.wideable = wideable;
+        this.lengthable = lengthable;
 
         this._setLatLngs(this.getLatLngs());
     },
-
     getCenter: function getCenter() {
         return this._center;
     },
-
     setCenter: function setCenter(center) {
         this._center = L.latLng(center);
         return this.redraw();
     },
-
     getWidth: function getWidth() {
         return this._width;
     },
-
     setWidth: function setWidth() {
         var width = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 100;
 
         this._width = Math.abs(width);
         return this.redraw();
     },
-
     getLength: function getLength() {
         return this._length;
     },
-
     setLength: function setLength() {
         var length = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 100;
 
         this._length = Math.abs(length);
         return this.redraw();
     },
-
     getBearing: function getBearing() {
         return this._bearing;
     },
-
     setBearing: function setBearing() {
         var bearing = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
 
         this._bearing = bearing % 360;
         return this.redraw();
     },
-
     getOptions: function getOptions() {
         return this.options;
     },
-
     setOptions: function setOptions() {
         var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
         L.setOptions(this, options);
         return this.redraw();
     },
-
     getLatLngs: function getLatLngs() {
         var latLngs = [];
 
@@ -124,13 +128,12 @@ L.Box = L.Polygon.extend({
 
         return [latLngs];
     },
+    setLatLngs: function setLatLngs() {
+        var latLngs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.getLatLngs();
 
-
-    setLatLngs: function setLatLngs(latLngs) {
-        this._setLatLngs(this.getLatLngs());
+        this._setLatLngs(latLngs);
         return this.redraw();
     },
-
     getMaxMin: function getMaxMin(values) {
         return values.reduce(function (acc, val) {
             var newAcc = _extends({}, acc);
@@ -143,13 +146,48 @@ L.Box = L.Polygon.extend({
 
     setStyle: L.Path.prototype.setStyle,
 
+    getRhumb: function getRhumb() {
+        return this._rhumb;
+    },
+    setRhumb: function setRhumb() {
+        var rhumb = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 45;
+
+        this._rhumb = rhumb;
+        return this.redraw();
+    },
     computeDestinationPoint: function computeDestinationPoint() {
         var start = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { lat: 0, lng: 0 };
         var distance = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
         var bearing = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
         var radius = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 6378137;
+        var rhumb = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : this.getRhumb();
 
+        if (rhumb) {
+            /*http://www.movable-type.co.uk/scripts/latlong.html*/
 
+            var δ = Number(distance) / radius; // angular distance in radians
+            var φ1 = start.lat * Math.PI / 180;
+            var λ1 = start.lng * Math.PI / 180;
+            var θ = bearing * Math.PI / 180;
+
+            var Δφ = δ * Math.cos(θ);
+            var φ2 = φ1 + Δφ;
+
+            // check for some daft bugger going past the pole, normalise latitude if so
+            if (Math.abs(φ2) > Math.PI / 2) φ2 = φ2 > 0 ? Math.PI - φ2 : -Math.PI - φ2;
+
+            var Δψ = Math.log(Math.tan(φ2 / 2 + Math.PI / 4) / Math.tan(φ1 / 2 + Math.PI / 4));
+            var q = Math.abs(Δψ) > 10e-12 ? Δφ / Δψ : Math.cos(φ1); // E-W course becomes ill-conditioned with 0/0
+
+            var Δλ = δ * Math.sin(θ) / q;
+            var λ2 = λ1 + Δλ;
+
+            //return new LatLon(φ2.toDegrees(), (λ2.toDegrees()+540) % 360 - 180); // normalise to −180..+180°
+            return {
+                lat: φ2 * 180 / Math.PI,
+                lng: (λ2 * 180 / Math.PI + 540) % 360 - 180
+            };
+        }
         var bng = bearing * Math.PI / 180;
 
         var lat1 = start.lat * Math.PI / 180;
@@ -167,7 +205,6 @@ L.Box = L.Polygon.extend({
             lng: lon2
         };
     },
-
     _update: function _update() {
         if (!this._map) {
             return;
@@ -177,7 +214,6 @@ L.Box = L.Polygon.extend({
         this._simplifyPoints();
         this._updatePath();
     },
-
     _updatePath: function _updatePath() {
         this._renderer._updatePoly(this, true);
     }
@@ -192,6 +228,16 @@ L.box = function (_ref2) {
         length = _ref2$length === undefined ? 100 : _ref2$length,
         _ref2$bearing = _ref2.bearing,
         bearing = _ref2$bearing === undefined ? 0 : _ref2$bearing,
-        options = objectWithoutProperties(_ref2, ['center', 'width', 'length', 'bearing']);
-    return new L.Box(_extends({ center: center, width: width, length: length, bearing: bearing }, options));
+        _ref2$rhumb = _ref2.rhumb,
+        rhumb = _ref2$rhumb === undefined ? false : _ref2$rhumb,
+        _ref2$rotatable = _ref2.rotatable,
+        rotatable = _ref2$rotatable === undefined ? true : _ref2$rotatable,
+        _ref2$moveable = _ref2.moveable,
+        moveable = _ref2$moveable === undefined ? true : _ref2$moveable,
+        _ref2$wideable = _ref2.wideable,
+        wideable = _ref2$wideable === undefined ? true : _ref2$wideable,
+        _ref2$lengthable = _ref2.lengthable,
+        lengthable = _ref2$lengthable === undefined ? true : _ref2$lengthable,
+        options = objectWithoutProperties(_ref2, ['center', 'width', 'length', 'bearing', 'rhumb', 'rotatable', 'moveable', 'wideable', 'lengthable']);
+    return new L.Box(_extends({ center: center, width: width, rhumb: rhumb, length: length, bearing: bearing, rotatable: rotatable, moveable: moveable, wideable: wideable, lengthable: lengthable }, options));
 };
