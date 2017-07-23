@@ -46,9 +46,9 @@ L.Edit.Box = L.Edit.SimpleShape.extend({
 
         this._moveMarker = this._createMarker(center, this.options.moveIcon)
 
-        console.log(this._shape)
-
         this._moveMarker.options.draggable = this._shape.moveable
+
+        this._moveMarker.setOpacity(this._shape.moveable ? 1.0 : 0.0)
     },
 
     _createResizeMarker () {
@@ -56,6 +56,8 @@ L.Edit.Box = L.Edit.SimpleShape.extend({
             .map((latLng) => this._createMarker(latLng, this.options.resizeIcon))
             .map((marker, index) => {
                 marker.options.draggable = (this._shape.wideable || this._shape.lengthable)
+
+                marker.setOpacity(this._shape.wideable || this._shape.lengthable ? 1.0 : 0.0)
 
                 switch (index) {
 

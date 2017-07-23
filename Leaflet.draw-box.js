@@ -197,9 +197,9 @@ L.Edit.Box = L.Edit.SimpleShape.extend({
 
         this._moveMarker = this._createMarker(center, this.options.moveIcon);
 
-        console.log(this._shape);
-
         this._moveMarker.options.draggable = this._shape.moveable;
+
+        this._moveMarker.setOpacity(this._shape.moveable ? 1.0 : 0.0);
     },
     _createResizeMarker: function _createResizeMarker() {
         var _this = this;
@@ -208,6 +208,8 @@ L.Edit.Box = L.Edit.SimpleShape.extend({
             return _this._createMarker(latLng, _this.options.resizeIcon);
         }).map(function (marker, index) {
             marker.options.draggable = _this._shape.wideable || _this._shape.lengthable;
+
+            marker.setOpacity(_this._shape.wideable || _this._shape.lengthable ? 1.0 : 0.0);
 
             switch (index) {
 
