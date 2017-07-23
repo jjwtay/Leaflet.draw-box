@@ -32,9 +32,9 @@ See [Leaflet.draw](https://github.com/Leaflet/Leaflet.draw#using) and [leaflet.b
 
 Creating:
 
-    L.Draw.Box(map, options*).enable()
+    new L.Draw.Box(map, options*).enable()
 
-    L.Draw.Rect(map, options*).enable()
+    new L.Draw.Rect(map, options*).enable()
 
     * Where options are the same structure as for Leaflet.draw
 
