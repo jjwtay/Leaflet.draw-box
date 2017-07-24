@@ -170,7 +170,7 @@
             }
         }
         let box0 = L.box({
-            center: [-37.7772, 175.2556],
+            center: [-37.7772, 175.2456],
             width: 750,
             length: 500,
             bearing: -45,
@@ -179,7 +179,7 @@
         }).on('dblclick', e => toggle(e, box0))
 
         let box1 = L.box({
-            center: [-37.7772, 175.2756],
+            center: [-37.7772, 175.2656],
             width: 750,
             length: 500,
             bearing: 0,
@@ -187,7 +187,7 @@
         }).on('dblclick', e => toggle(e, box1))
 
         let box2 = L.box({
-            center: [-37.7772, 175.2656],
+            center: [-37.7772, 175.2556],
             width: 750,
             length: 500,
             bearing: 45,
@@ -196,27 +196,38 @@
         }).on('dblclick', e => toggle(e, box2))
 
         let box3 = L.rect({
-            center: [-37.7772, 175.2856],
+            center: [-37.7772, 175.2756],
             width: 750,
             length: 500,
-            bearing: 45,
+            bearing: 90,
             color: 'green'    
         }).on('dblclick', e => toggle(e, box3))
 
         let box4 = L.box({
-            center: [-37.7772, 175.2956],
+            center: [-37.7772, 175.2856],
             width: 750,
             length: 500,
-            bearing: 65,
+            bearing: 135,
             wideable: false,
             color: 'purple'
         }).on('dblclick', e => toggle(e, box4))
+
+        let box5 = L.box({
+            center: [-37.7772, 175.2856],
+            width: 750,
+            length: 500,
+            bearing: 135,
+            wideable: false,
+            lengthable: false,
+            color: 'brown'            
+        }).on('dblclick', e => toggle(e, box5))
 
         map.addLayer(box0)
         map.addLayer(box1)
         map.addLayer(box2)
         map.addLayer(box3)
         map.addLayer(box4)
+        map.addLayer(box5)
 	</script>
 </body>
 
