@@ -5,7 +5,8 @@
   "main": "Leaflet.draw-box.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rollup --config rollup.config.js"
+    "build": "rollup --config rollup.config.js",
+    "dev": "rollup -w --config.rollup.config.js"
   },
   "repository": {
     "type": "git",
@@ -25,7 +26,8 @@
     "eslint": "^4.3.0",
     "geolib": "^2.0.22",
     "rollup-plugin-babel": "^2.7.1",
-    "rollup-plugin-node-resolve": "^3.0.0"
+    "rollup-plugin-node-resolve": "^3.0.0",
+    "rollup-watch": "^4.3.1"
   },
   "dependencies": {
     "the-answer": "^1.0.0"

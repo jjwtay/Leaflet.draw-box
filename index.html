@@ -5,25 +5,15 @@
 <head>
 	<title>Leaflet Draw Box</title>
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"
-
-        crossorigin=""/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" crossorigin=""/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/0.4.2/leaflet.draw.css" crossorigin=""/>
-
-    <!--
-	<link rel="stylesheet" href="../Leaflet.draw/dist/leaflet.draw.css" />
-	<link rel="stylesheet" href="../dist/leaflet.draw-ellipse.css" />-->
     <link rel="stylesheet" href="https://unpkg.com/leaflet-easybutton@2.0.0/src/easy-button.css">
 
     <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js" crossorigin=""></script>
 	<script src="https://unpkg.com/leaflet-easybutton@2.0.0/src/easy-button.js"></script>
     <script src="./example/leaflet.draw-src.js"></script>
     <script src="./example/leaflet.box.js"></script>
-    <script src="./example/leaflet.arc.js"></script>
-    <script src="./example/leaflet.sector.js"></script>
 	<script src="./Leaflet.draw-box.js"></script>
-    <script src="./example/Leaflet.draw-arc.js"></script>
-    <script src="./example/Leaflet.draw-sector.js"></script>
     
 </head>
 
@@ -173,27 +163,28 @@
             center: [-37.7772, 175.2456],
             width: 750,
             length: 500,
-            bearing: -45,
+            bearing: -135,
             color: 'hotpink',
             moveable: false
         }).on('dblclick', e => toggle(e, box0))
 
         let box1 = L.box({
-            center: [-37.7772, 175.2656],
-            width: 750,
-            length: 500,
-            bearing: 0,
-            color: 'blue'
-        }).on('dblclick', e => toggle(e, box1))
-
-        let box2 = L.box({
             center: [-37.7772, 175.2556],
             width: 750,
             length: 500,
-            bearing: 45,
+            bearing: -90,
             color: 'red',
             rotatable: false        
+        }).on('dblclick', e => toggle(e, box1))
+
+        let box2 = L.box({
+            center: [-37.7772, 175.2656],
+            width: 750,
+            length: 500,
+            bearing: -45,
+            color: 'blue'
         }).on('dblclick', e => toggle(e, box2))
+
 
         let box3 = L.rect({
             center: [-37.7772, 175.2756],
@@ -206,7 +197,7 @@
             center: [-37.7772, 175.2856],
             width: 750,
             length: 500,
-            bearing: 90,
+            bearing: 45,
             wideable: false,
             color: 'purple'
         }).on('dblclick', e => toggle(e, box4))
@@ -215,7 +206,7 @@
             center: [-37.7772, 175.2956],
             width: 750,
             length: 500,
-            bearing: 135,
+            bearing: 90,
             wideable: false,
             lengthable: false,
             color: 'brown'            
