@@ -345,7 +345,12 @@ L.Box.addInitHook(function () {
     });
 
     this.on('remove', function () {
-        if (this.editing && this.editing.enabled()) {
+        /** Note: Needed to add unneccessary check for _resizeMarkers
+         *  due to odd behavior when used in react-leaflet. React-leaflet
+         *  seems to call this after it's already killed the object which
+         *  causes a break in removeHooks due to _resizeMarkers not existing.
+         */
+        if (this.editing && this.editing.enabled() && this.editing._resizeMarkers) {
             this.editing.removeHooks();
         }
     });
